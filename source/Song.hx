@@ -19,7 +19,6 @@ typedef SwagSong =
 	var player2:String;
 	var stage:String;
 	var gf:String;
-	var validScore:Bool;
 }
 
 typedef SongEvents =
@@ -51,40 +50,23 @@ class Song
 	{
 		var rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
 
-		while (!rawJson.endsWith("}"))
-		{
-			rawJson = rawJson.substr(0, rawJson.length - 1);
-			// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
+		if (rawJson == null)
+			throw "Could not find JSON file in " + folder.toLowerCase().trim() + ".";
+
+		if (rawJson != null){
+			while (!rawJson.endsWith("}"))
+				rawJson = rawJson.substr(0, rawJson.length - 1);
 		}
-
-		// FIX THE CASTING ON WINDOWS/NATIVE
-		// Windows???
-		// trace(songData);
-
-		// trace('LOADED FROM JSON: ' + songData.notes);
-		/* 
-			for (i in 0...songData.notes.length)
-			{
-				trace('LOADED FROM JSON: ' + songData.notes[i].sectionNotes);
-				// songData.notes[i].sectionNotes = songData.notes[i].sectionNotes
-			}
-
-				daNotes = songData.notes;
-				daSong = songData.song;
-				daBpm = songData.bpm; */
-
 		return parseJSONshit(rawJson);
 	}
 
 	public static function parseJSONshit(rawJson:String):SwagSong
 	{
-		var swagShit:SwagSong = cast Json.parse(rawJson).song;
-		swagShit.validScore = true;
-		return swagShit;
+		return cast Json.parse(rawJson).song;
 	}
+
 	public static function parseEventJSON(rawJson:String):SongEvents
 	{
-		var swagShit:SongEvents = cast Json.parse(rawJson).events;
-		return swagShit;
+		return cast Json.parse(rawJson).events;
 	}
 }

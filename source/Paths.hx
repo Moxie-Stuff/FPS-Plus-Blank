@@ -1,42 +1,25 @@
 package;
 
-#if sys
-import sys.FileSystem;
-#end
-
 import flixel.graphics.frames.FlxAtlasFrames;
 
 class Paths
 {
-
     static final audioExtension:String = "ogg";
 
     inline static public function file(key:String, location:String, extension:String):String{
-
         var data:String = 'assets/$location/$key.$extension';
-        /*#if override
-        if(FileSystem.exists('override/$location/$key.$extension')){
-            data = 'override/$location/$key.$extension';
-            //trace("OVERRIDE FOR " + key + " FOUND!");
-        }
-        #end*/
         return data;
-
     }
 
     inline static public function image(key:String, forceLoadFromDisk:Bool = false):Dynamic{
-
         var data:String = file(key, "images", "png");
 
         if(ImageCache.exists(data) && !forceLoadFromDisk){
-            //trace(key + " is in the cache");
             return ImageCache.get(data);
         }
         else{
-            //trace(key + " loading from file");
             return data;
         }
-            
     }
 
     inline static public function xml(key:String, ?location:String = "images"){

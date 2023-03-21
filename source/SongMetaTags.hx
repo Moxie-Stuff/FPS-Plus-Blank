@@ -17,7 +17,6 @@ using flixel.util.FlxSpriteUtil;
 
 class SongMetaTags extends FlxSpriteGroup
 {
-
     var meta:Array<Array<String>> = [];
     var size:Float = 0;
     var fontSize:Int = 24;
@@ -43,10 +42,7 @@ class SongMetaTags extends FlxSpriteGroup
 
         x -= size;
         visible = false;
-        
     }
-
-
 
     public function start(){
 

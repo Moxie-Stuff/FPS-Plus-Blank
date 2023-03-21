@@ -8,7 +8,6 @@ import openfl.display.Sprite;
 
 class Main extends Sprite
 {
-
 	public static var fpsDisplay:FPS;
 
 	public static var novid:Bool = false;
@@ -23,13 +22,18 @@ class Main extends Sprite
 		flippymode = Sys.args().contains("-flippymode");
 		#end
 
+		FlxG.signals.preStateSwitch.add(() -> {
+			#if cpp
+			cpp.NativeGc.run(true);
+			#end
+			openfl.system.System.gc();
+		});
+
 		addChild(new FlxGame(0, 0, Startup, 144, 144, true));
 
-		#if !mobile
 		fpsDisplay = new FPS(10, 3, 0xFFFFFF);
 		fpsDisplay.visible = true;
 		addChild(fpsDisplay);
-		#end
 
 		//On web builds, video tends to lag quite a bit, so this just helps it run a bit faster.
 		#if web
@@ -39,6 +43,5 @@ class Main extends Sprite
 		trace("-=Args=-");
 		trace("novid: " + novid);
 		trace("flippymode: " + flippymode);
-
 	}
 }

@@ -3,7 +3,6 @@ package;
 import config.*;
 
 import flixel.FlxSprite;
-//import polymod.format.ParseRules.TargetSignatureElement;
 
 using StringTools;
 
@@ -34,10 +33,6 @@ class Note extends FlxSprite
 	public var yOffset:Float = 0;
 
 	public static var swagWidth:Float = 160 * 0.7;
-	public static var PURP_NOTE:Int = 0;
-	public static var GREEN_NOTE:Int = 2;
-	public static var BLUE_NOTE:Int = 1;
-	public static var RED_NOTE:Int = 3;
 
 	public function new(_strumTime:Float, _noteData:Int, _type:String, ?_editor = false, ?_prevNote:Note, ?_sustainNote:Bool = false)
 	{

@@ -21,22 +21,17 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
-//import polymod.Polymod;
 
 using StringTools;
 
 class TitleScreen extends MusicBeatState
 {
-
 	public static var titleMusic:String = "klaskiiLoop"; 
 
 	override public function create():Void
 	{
-		//Polymod.init({modRoot: "mods", dirs: ['introMod']});
-
 		// DEBUG BULLSHIT
 
 		useDefaultTransIn = false;
@@ -104,7 +99,6 @@ class TitleScreen extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		Conductor.songPosition = FlxG.sound.music.time;
-			// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
 		if (FlxG.keys.justPressed.F)
 		{
