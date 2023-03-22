@@ -13,54 +13,31 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
 import openfl.system.System;
-//import openfl.utils.Future;
-//import flixel.addons.util.FlxAsyncLoop;
 
 using StringTools;
 
 class Startup extends FlxState
 {
-
     var nextState:FlxState = new TitleVideo();
 
     var splash:FlxSprite;
-    //var dummy:FlxSprite;
     var loadingText:FlxText;
 
     var songsCached:Bool;
-    public static final songs:Array<String> =   ["Tutorial", 
-                                "Bopeebo", "Fresh", "Dadbattle", 
-                                "Spookeez", "South", "Monster",
-                                "Pico", "Philly", "Blammed", 
-                                "Satin-Panties", "High", "Milf", 
-                                "Cocoa", "Eggnog", "Winter-Horrorland", 
-                                "Senpai", "Roses", "Thorns",
-                                "klaskiiLoop", "freakyMenu"]; //Start of the non-gameplay songs.
+    public static final songs:Array<String> = ["Tutorial", "klaskiiLoop", "freakyMenu"]; //Start of the non-gameplay songs.
                                 
     //List of character graphics and some other stuff.
     //Just in case it want to do something with it later.
     var charactersCached:Bool;
     var startCachingCharacters:Bool = false;
     var charI:Int = 0;
-    public static final characters:Array<String> =   ["BOYFRIEND", "bfCar", "christmas/bfChristmas", "weeb/bfPixel", "weeb/bfPixelsDEAD",
-                                    "GF_assets", "gfCar", "christmas/gfChristmas", "weeb/gfPixel",
-                                    "DADDY_DEAREST", "spooky_kids_assets", "Monster_Assets",
-                                    "Pico_FNF_assetss", "Mom_Assets", "momCar",
-                                    "christmas/mom_dad_christmas_assets", "christmas/monsterChristmas",
-                                    "weeb/senpai", "weeb/spirit", "weeb/senpaiCrazy"];
+    public static final characters:Array<String> = ["BOYFRIEND", "GF_assets", "DADDY_DEAREST"];
 
     var graphicsCached:Bool;
     var startCachingGraphics:Bool = false;
     var gfxI:Int = 0;
-    public static final graphics:Array<String> =    ["logoBumpin", "logoBumpin2", "titleBG", "gfDanceTitle", "gfDanceTitle2", "titleEnter",
-                                    "stageback", "stagefront", "stagecurtains",
-                                    "halloween_bg",
-                                    "philly/sky", "philly/city", "philly/behindTrain", "philly/train", "philly/street", "philly/win0", "philly/win1", "philly/win2", "philly/win3", "philly/win4",
-                                    "limo/bgLimo", "limo/fastCarLol", "limo/limoDancer", "limo/limoDrive", "limo/limoSunset",
-                                    "christmas/bgWalls", "christmas/upperBop", "christmas/bgEscalator", "christmas/christmasTree", "christmas/bottomBop", "christmas/fgSnow", "christmas/santa",
-                                    "christmas/evilBG", "christmas/evilTree", "christmas/evilSnow",
-                                    "weeb/weebSky", "weeb/weebSchool", "weeb/weebStreet", "weeb/weebTreesBack", "weeb/weebTrees", "weeb/petals", "weeb/bgFreaks",
-                                    "weeb/animatedEvilSchool"];
+    public static final graphics:Array<String> = ["logoBumpin", "logoBumpin2", "titleBG", "gfDanceTitle", "gfDanceTitle2", "titleEnter", "stageback", "stagefront", 
+    "stagecurtains"];
 
     var cacheStart:Bool = false;
 
@@ -68,7 +45,6 @@ class Startup extends FlxState
 
 	override function create()
 	{
-
         FlxG.mouse.visible = false;
         FlxG.sound.muteKeys = null;
 
@@ -80,17 +56,6 @@ class Startup extends FlxState
         PlayerSettings.player1.controls.loadKeyBinds();
 		Config.configCheck();
 
-        /*Switched to a new custom transition system.
-        var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-        diamond.persist = true;
-        diamond.destroyOnNoUse = false;
-        
-        FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), 
-            {asset: diamond, width: 32, height: 32},  new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-        FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
-            {asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-        */
-
         UIStateExt.defaultTransIn = ScreenWipeIn;
         UIStateExt.defaultTransInArgs = [1.2];
         UIStateExt.defaultTransOut = ScreenWipeOut;
@@ -98,10 +63,6 @@ class Startup extends FlxState
 
         if (FlxG.save.data.weekUnlocked != null)
 		{
-			// FIX LATER!!!
-			// WEEK UNLOCK PROGRESSION!!
-			// StoryMenuState.weekUnlocked = FlxG.save.data.weekUnlocked;
-
 			if (StoryMenuState.weekUnlocked.length < 4)
 				StoryMenuState.weekUnlocked.insert(0, true);
 
@@ -145,7 +106,6 @@ class Startup extends FlxState
         });
 
         super.create();
-
     }
 
     override function update(elapsed) 
@@ -213,9 +173,7 @@ class Startup extends FlxState
                 gfxI++;
             }
         }
-        
         super.update(elapsed);
-
     }
 
     function preload(){
@@ -223,26 +181,14 @@ class Startup extends FlxState
         loadingText.text = "Caching Assets...";
         
         if(!songsCached){ 
-            #if sys sys.thread.Thread.create(() -> { #end
+            #if target.threaded
+            sys.thread.Thread.create(() -> {
                 preloadMusic();
-            #if sys }); #end
+            });
+            #else
+            preloadMusic();
+            #end
         }
-        
-
-        /*if(!charactersCached){
-            var i = 0;
-            var charLoadLoop = new FlxAsyncLoop(characters.length, function(){
-                ImageCache.add(Paths.file(characters[i], "images", "png"));
-                i++;
-            }, 1);
-        }
-
-        for(x in characters){
-            
-            //trace("Chached " + x);
-        }
-        loadingText.text = "Characters cached...";
-        charactersCached = true;*/
 
         if(!charactersCached){
             startCachingCharacters = true;
